@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
  * get_opcode - func that get the opcode.
@@ -60,8 +61,9 @@ int main(__attribute__((unused)) int argc, char const *argv[])
 		fprintf(stderr, "Error: open file is not exist %s\n", argv[1]);
 		exit(1);
 	}
-	for (line_number = 1; getline(&buffer, &size, file) != -1; line_number++)
+	while ((getline(&buffer, &size, file)) != -1)
 	{
+		line_number++;
 		opcode = strtok(buffer, DIL);
 		if (opcode == NULL || opcode[0] == '#')
 			continue;
@@ -77,10 +79,12 @@ int main(__attribute__((unused)) int argc, char const *argv[])
 	}
 	fclose(file);
 	free(buffer);
-	for (; stack != NULL;)
+	while (stack != NULL)
+	{
 		current = stack;
 		stack = stack->next;
 		free(current);
+	}
 	return (0);
 }
 /**
